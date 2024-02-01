@@ -676,6 +676,7 @@ MonoBehaviour:
   floorLayer:
     serializedVersion: 2
     m_Bits: 256
+  skin: {fileID: 328243808}
 --- !u!50 &895919087
 Rigidbody2D:
   serializedVersion: 4
