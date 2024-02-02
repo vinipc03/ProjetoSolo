@@ -4,28 +4,36 @@ using UnityEngine;
 
 public class Parallax : MonoBehaviour
 {
-    public Camera cam;
-    public Transform subject;
+    private float length;
+    private float StartPos;
 
-    Vector2 startPosition;
-    float startZ;
-
-    Vector2 travel => (Vector2)cam.transform.position - startPosition;
-    float distanceFromSubject => transform.position.z - subject.position.z;
-    float clippingPlane => (cam.transform.position.z + (distanceFromSubject > 0 ? cam.farClipPlane : cam.nearClipPlane));
-
-    float parallaxFactor => Mathf.Abs(distanceFromSubject) / clippingPlane;
+    private Transform cam;
+    
+    public float ParallaxEffect;
 
     private void Start()
     {
-        startPosition = transform.position;
-        startZ = transform.position.z;
+        StartPos = transform.position.x;
+        length = GetComponent<SpriteRenderer>().bounds.size.x;
+        cam = Camera.main.transform;
     }
 
     private void Update()
     {
-        Vector2 newPos = startPosition + travel * parallaxFactor;
-        transform.position = new Vector3(newPos.x, newPos.y, startZ);
+        float RePos = cam.transform.position.x * (1 - ParallaxEffect);
+        float Distance = cam.transform.position.x * ParallaxEffect;
 
+        transform.position = new Vector3(StartPos + Distance, transform.position.y, transform.position.z);
+
+        if(RePos > StartPos + length)
+        {
+            StartPos += length;
+        }
+        else if(RePos < StartPos - length)
+        {
+            StartPos -= length;
+        }
+
+    }
 
 }
