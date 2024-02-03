@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public int comboNum;
     float comboTime;
     private float dashTime;
+    private bool onAttack;
     
 
     // Start is called before the first frame update
@@ -26,7 +27,10 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Jump();
-        Movement();
+        if (!onAttack)
+        {
+            Movement();
+        }
         Attack();
         Dash();
         Death();
@@ -92,6 +96,7 @@ public class PlayerController : MonoBehaviour
     #region Attacks
     void Attack() //ATAQUES DO PERSONAGEM 
     {
+        // ATAQUE NO AR
         bool canJump = Physics2D.OverlapCircle(floorCollider.position, 0.3f, floorLayer);
         comboTime = comboTime + Time.deltaTime;
         if(canJump == false && Input.GetButtonDown("Fire1") && comboTime > 0.5f)
@@ -109,8 +114,10 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            if (Input.GetButtonDown("Fire1") && comboTime > 0.5f)
+            // ATAQUE NO CHÃO
+            if (Input.GetButtonDown("Fire1") && comboTime > 0.5f && !onAttack)
             {
+                vel = new Vector2(Input.GetAxisRaw("Horizontal") * 0, rb.velocity.y);
                 comboNum++;
                 if (comboNum > 3)
                 {
@@ -118,6 +125,7 @@ public class PlayerController : MonoBehaviour
                 }
                 comboTime = 0;
                 skin.GetComponent<Animator>().Play("PlayerAttack" + comboNum, -1);
+                onAttack = true;
             }
         }
        
@@ -140,5 +148,11 @@ public class PlayerController : MonoBehaviour
     void RestoreGravityScale()
     {
         rb.gravityScale = 3;
+    }
+
+    public void FinishAttack()
+    {
+        vel = new Vector2(Input.GetAxisRaw("Horizontal") * 4, rb.velocity.y);
+        onAttack = false;
     }
 }

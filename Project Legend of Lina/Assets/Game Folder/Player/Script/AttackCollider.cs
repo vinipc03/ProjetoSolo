@@ -7,7 +7,6 @@ public class AttackCollider : MonoBehaviour
 
     public Transform player;
     
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Enemy"))
@@ -31,5 +30,10 @@ public class AttackCollider : MonoBehaviour
             }
 
         }
+    }
+
+    public void FinishAttack()
+    {
+        player.GetComponent<PlayerController>().FinishAttack();
     }
 }
