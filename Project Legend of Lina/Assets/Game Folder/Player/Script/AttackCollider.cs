@@ -31,9 +31,4 @@ public class AttackCollider : MonoBehaviour
 
         }
     }
-
-    public void FinishAttack()
-    {
-        player.GetComponent<PlayerController>().FinishAttack();
-    }
 }

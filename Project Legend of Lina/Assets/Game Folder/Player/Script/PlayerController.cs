@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public Transform floorCollider;
     public LayerMask floorLayer;
     public Transform skin;
+    public Image lifeBar;
 
     public int comboNum;
     float comboTime;
@@ -33,9 +35,8 @@ public class PlayerController : MonoBehaviour
         }
         Attack();
         Dash();
+        LifeBarControl();
         Death();
-
-       
     }
 
     private void FixedUpdate()
@@ -69,6 +70,7 @@ public class PlayerController : MonoBehaviour
         bool canJump = Physics2D.OverlapCircle(floorCollider.position, 0.3f, floorLayer);
         if (canJump && Input.GetButtonDown("Jump")) // && comboTime > 0.5f
         {
+            onAttack = false;
             skin.GetComponent<Animator>().Play("PlayerJump", -1);
             rb.velocity = Vector2.zero;
             rb.AddForce(new Vector2(0, 600));
@@ -81,6 +83,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Fire2") && dashTime > 1)
         {
             dashTime = 0;
+            onAttack = false;
             skin.GetComponent<Animator>().Play("PlayerDash", -1);
             rb.velocity = Vector2.zero;
             rb.AddForce(new Vector2(skin.localScale.x * 300, 0));
@@ -90,6 +93,11 @@ public class PlayerController : MonoBehaviour
 
         
     }
+
+    void RestoreGravityScale()
+    {
+        rb.gravityScale = 3;
+    } //RESTAURA GRAVIDADE
 
     #endregion
 
@@ -135,24 +143,33 @@ public class PlayerController : MonoBehaviour
             comboNum = 0;
         }
     }
-    #endregion
-
-    void Death() //MORTE 
-    {
-        if (GetComponent<Character>().life <= 0)
-        {
-            this.enabled = false;
-        }
-    }
-
-    void RestoreGravityScale()
-    {
-        rb.gravityScale = 3;
-    }
 
     public void FinishAttack()
     {
         vel = new Vector2(Input.GetAxisRaw("Horizontal") * 4, rb.velocity.y);
         onAttack = false;
+    }  //PERSONAGEM VOLTA A SE MOVER QUANDO TERMINA ATAQUE
+    #endregion
+
+    #region HealthControls
+    void Death() //MORTE 
+    {
+        if (GetComponent<Character>().life <= 0)
+        {
+            this.enabled = false;
+            rb.simulated = false;
+        }
     }
+
+    void LifeBarControl()
+    {
+        lifeBar.fillAmount = GetComponent<Character>().life / GetComponent<Character>().maxLife;
+    }
+    
+
+    #endregion
+
+
+
+
 }
