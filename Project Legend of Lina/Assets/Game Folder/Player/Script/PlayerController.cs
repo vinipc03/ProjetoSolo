@@ -5,17 +5,26 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Component")]
     Rigidbody2D rb;
-    Vector2 vel;
+    public Transform skin;
 
+    [Header("Movement")]
+    Vector2 vel;
+    public float speed;
+    private float moveInput;
+    public float jumpForce;
+    public float jumpTime;
+    private float jumpTimeCounter;
+    private bool isJumping;
     public Transform floorCollider;
     public LayerMask floorLayer;
-    public Transform skin;
+    private float dashTime;
+    
+    [Header("Combat")]
     public Image lifeBar;
-
     public int comboNum;
     float comboTime;
-    private float dashTime;
     private bool onAttack;
     
 
@@ -45,6 +54,8 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = vel;
         }
+        
+
     }
 
 
@@ -52,9 +63,9 @@ public class PlayerController : MonoBehaviour
 
     void Movement() //MOVIMENTAÇÃO DIREITA E ESQUERDA 
     {
-        vel = new Vector2(Input.GetAxisRaw("Horizontal") * 4, rb.velocity.y);
-        
-        if(Input.GetAxisRaw("Horizontal") != 0)
+        vel = new Vector2(moveInput * speed, rb.velocity.y);
+        moveInput = Input.GetAxisRaw("Horizontal");
+        if (Input.GetAxisRaw("Horizontal") != 0)
         {
             skin.localScale = new Vector3(Input.GetAxisRaw("Horizontal"), 1, 1);
             skin.GetComponent<Animator>().SetBool("PlayerRun", true);
@@ -70,10 +81,30 @@ public class PlayerController : MonoBehaviour
         bool canJump = Physics2D.OverlapCircle(floorCollider.position, 0.3f, floorLayer);
         if (canJump && Input.GetButtonDown("Jump")) // && comboTime > 0.5f
         {
+            isJumping = true;
+            jumpTimeCounter = jumpTime;
             onAttack = false;
             skin.GetComponent<Animator>().Play("PlayerJump", -1);
-            rb.velocity = Vector2.zero;
-            rb.AddForce(new Vector2(0, 600));
+            rb.velocity = Vector2.up * jumpForce;
+        }
+
+        if (Input.GetButton("Jump"))
+        {
+            if(jumpTimeCounter > 0 && isJumping == true)
+            {
+                rb.velocity = Vector2.up * jumpForce;
+                jumpTimeCounter -= Time.deltaTime;
+            }
+            else
+            {
+                isJumping = false;
+
+            }
+        }
+
+        if (Input.GetButtonUp("Jump"))
+        {
+            isJumping = false;
         }
     }
 
@@ -90,8 +121,6 @@ public class PlayerController : MonoBehaviour
             rb.gravityScale = 0;
             Invoke("RestoreGravityScale", 0.3f);
         }
-
-        
     }
 
     void RestoreGravityScale()
@@ -161,7 +190,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void LifeBarControl()
+    void LifeBarControl() //CONTROLE BARRA DE VIDA
     {
         lifeBar.fillAmount = GetComponent<Character>().life / GetComponent<Character>().maxLife;
     }
