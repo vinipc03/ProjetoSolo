@@ -15,14 +15,14 @@ public class SkeletonController : MonoBehaviour
 
     public bool activeMovement;
 
-    public float raioVisao = 5f; // Raio de visão do inimigo
+    public float visionRadius = 5f; // Raio de visão do inimigo
     private Transform target;
 
     // Calcula a direção para o jogador
     public float posX; 
 
-    private enum Estado { Patrulhando, Perseguindo };
-    private Estado estadoAtual = Estado.Patrulhando;
+    private enum State { Patrol, Chase };
+    private State atualState = State.Patrol;
 
     // Start is called before the first frame update
     void Start()
@@ -41,34 +41,27 @@ public class SkeletonController : MonoBehaviour
         }
 
         posX = target.transform.position.x - transform.position.x;
-        switch (estadoAtual)
+        switch (atualState)
         {
-            case Estado.Patrulhando:
-                Patrulhar();
+            case State.Patrol:
+                Patrol();
                 break;
-            case Estado.Perseguindo:
-                Perseguir();
-                AtualizarRotacao();
+            case State.Chase:
+                Chase();
+                UpdateRotation();
                 break;
         }
-
-        /*if (activeMovement == true)
-        {
-            Movement();
-        }  */
-        
         Death();
     }
 
-    void Patrulhar()
+    void Patrol()
     {
         // Lógica de patrulha entre os pontos A e B
-        // Por exemplo, use algum tipo de interpolação linear para suavizar o movimento entre os pontos.
         if (goRight == true)
         {
             skin.localScale = new Vector3(1, 1, 1);
 
-            if (Vector2.Distance(transform.position, b.position) < 0.1f)
+            if (Vector2.Distance(transform.position, b.position) < 0.3f)
             {
                 goRight = false;
             }
@@ -77,7 +70,7 @@ public class SkeletonController : MonoBehaviour
         else
         {
             skin.localScale = new Vector3(-1, 1, 1);
-            if (Vector2.Distance(transform.position, a.position) < 0.1f)
+            if (Vector2.Distance(transform.position, a.position) < 0.3f)
             {
                 goRight = true;
             }
@@ -85,22 +78,22 @@ public class SkeletonController : MonoBehaviour
         }
 
         // Verifica se o jogador está dentro do raio de visão
-        if (Vector3.Distance(transform.position, target.position) < raioVisao)
+        if (Vector3.Distance(transform.position, target.position) < visionRadius)
         {
-            estadoAtual = Estado.Perseguindo;
+            atualState = State.Chase;
         }
     }
 
-    void Perseguir()
+    void Chase()
     {
         // Lógica de perseguição ao jogador
         transform.position = Vector3.MoveTowards(transform.position, target.position, 2 * Time.deltaTime);
 
         // Verifica se o jogador saiu do raio de visão
-        if (Vector3.Distance(transform.position, target.position) > raioVisao)
+        if (Vector3.Distance(transform.position, target.position) > visionRadius)
         {
             transform.eulerAngles = new Vector2(0, 0);
-            estadoAtual = Estado.Patrulhando;
+            atualState = State.Patrol;
         }
     }
 
@@ -149,7 +142,7 @@ public class SkeletonController : MonoBehaviour
         }
     }
 
-    void AtualizarRotacao()
+    void UpdateRotation()
     {
         // Define a rotação para apontar para o eixo X ou Y, dependendo da direção
         if (posX > 0)
@@ -166,7 +159,7 @@ public class SkeletonController : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawWireSphere(transform.position, raioVisao);
+        Gizmos.DrawWireSphere(transform.position, visionRadius);
 
     }
 
