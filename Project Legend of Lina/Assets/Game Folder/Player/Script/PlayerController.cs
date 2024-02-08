@@ -61,6 +61,7 @@ public class PlayerController : MonoBehaviour
 
     #region Movements
 
+    
     void Movement() //MOVIMENTAÇÃO DIREITA E ESQUERDA 
     {
         vel = new Vector2(moveInput * speed, rb.velocity.y);
@@ -107,6 +108,7 @@ public class PlayerController : MonoBehaviour
             isJumping = false;
         }
     }
+    
 
     void Dash() //DASH
     {
@@ -152,7 +154,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             // ATAQUE NO CHÃO
-            if (Input.GetButtonDown("Fire1") && comboTime > 0.5f && !onAttack)
+            if (Input.GetButtonDown("Fire1") && comboTime > 0.2f && !onAttack)
             {
                 vel = new Vector2(Input.GetAxisRaw("Horizontal") * 0, rb.velocity.y);
                 comboNum++;
@@ -194,11 +196,8 @@ public class PlayerController : MonoBehaviour
     {
         lifeBar.fillAmount = GetComponent<Character>().life / GetComponent<Character>().maxLife;
     }
-    
+
 
     #endregion
-
-
-
 
 }

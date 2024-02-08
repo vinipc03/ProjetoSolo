@@ -104,7 +104,7 @@ public class SkeletonController : MonoBehaviour
         {
             skin.localScale = new Vector3(1, 1, 1);
 
-            if (Vector2.Distance(transform.position, b.position) < 0.1f)
+            if (Vector2.Distance(transform.position, b.position) < 0.3f)
             {
                 goRight = false;
             }
@@ -113,7 +113,7 @@ public class SkeletonController : MonoBehaviour
         else
         {
             skin.localScale = new Vector3(-1, 1, 1);
-            if (Vector2.Distance(transform.position, a.position) < 0.1f)
+            if (Vector2.Distance(transform.position, a.position) < 0.3f)
             {
                 goRight = true;
             }
