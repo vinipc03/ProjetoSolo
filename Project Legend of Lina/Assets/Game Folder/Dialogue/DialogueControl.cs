@@ -5,6 +5,15 @@ using UnityEngine.UI;
 
 public class DialogueControl : MonoBehaviour
 {
+    [System.Serializable]
+    public enum idiom
+    {
+        pt,
+        eng,
+        spa
+    }
+
+    public idiom language;
 
     [Header("Components")]
     public GameObject dialogueObj; //JANELA DO DIALOGO
@@ -17,9 +26,13 @@ public class DialogueControl : MonoBehaviour
     public float typingSpeed; //VELOCIDADE DA FALA
 
     //VARIÁVEIS DE CONTROLE
-    private bool isShowing; //SE A JANAELA ESTÁ VISÍVEL
-    private int index; // INDEX DAS SENTENÇAS
-    private string[] sentences;
+    [SerializeField] private bool isShowing; //SE A JANAELA ESTÁ VISÍVEL
+    [SerializeField] private int index; // INDEX DAS SENTENÇAS
+    private string[] sentences; // FALAS
+    private string[] currentActorName;
+    private Sprite[] actorSprite;
+
+    private PlayerController player;
 
     public static DialogueControl instance;
 
@@ -30,7 +43,7 @@ public class DialogueControl : MonoBehaviour
 
     void Start()
     {
-        
+        player = FindObjectOfType<PlayerController>();
     }
 
 
@@ -43,6 +56,7 @@ public class DialogueControl : MonoBehaviour
     {
         foreach (char letter in sentences[index].ToCharArray())
         {
+            Debug.Log("chamou o typesentence");
             speechText.text += letter;
             yield return new WaitForSeconds(typingSpeed);
 
@@ -52,31 +66,53 @@ public class DialogueControl : MonoBehaviour
     //PULA PARA PRÓXIMA FALA
     public void NextSentence()
     {
-        if(speechText.text == sentences[index])
+        if (speechText.text == sentences[index])
         {
-            if(index < sentences.Length - 1)
+            if (index < sentences.Length - 1)
             {
+                
                 index++;
+                Debug.Log("carregou o index");
+                profileSprite.sprite = actorSprite[index];
+                actorNameText.text = currentActorName[index];
                 speechText.text = "";
                 StartCoroutine(TypeSentence());
             }
             else //QUANDO TERMINA OS TEXTOS
             {
+                Debug.Log("Terminou a fala");
                 speechText.text = "";
+                actorNameText.text = "";
                 index = 0;
+                dialogueObj.SetActive(false);
+                sentences = null;
+                isShowing = false;
+                player.onAttack = false;
+                player.isTalking = false;
             }
         }
     }
 
     //CHAMA A FALA
-    public void Speech(string[] txt)
+    public void Speech(string[] txt, string[] actorName, Sprite[] actorProfile)
     {
+        
         if (!isShowing)
         {
-            dialogueObj.SetActive(true);
-            sentences = txt;
-            StartCoroutine(TypeSentence());
             isShowing = true;
+            dialogueObj.SetActive(true);
+            if(dialogueObj == true)
+            {
+                Debug.Log("dialogueObj está ativo");
+            }
+            sentences = txt;
+            currentActorName = actorName;
+            actorSprite = actorProfile;
+            profileSprite.sprite = actorSprite[index];
+            actorNameText.text = currentActorName[index];
+            StartCoroutine(TypeSentence());
+            player.onAttack = true;
+            player.isTalking = true;
         }
     }
 }

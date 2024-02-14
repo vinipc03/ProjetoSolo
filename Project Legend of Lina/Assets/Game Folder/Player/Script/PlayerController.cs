@@ -20,12 +20,13 @@ public class PlayerController : MonoBehaviour
     public Transform floorCollider;
     public LayerMask floorLayer;
     private float dashTime;
+    public bool isTalking;
     
     [Header("Combat")]
     public Image lifeBar;
     public int comboNum;
     float comboTime;
-    private bool onAttack;
+    public bool onAttack;
     
 
     // Start is called before the first frame update
@@ -37,7 +38,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Jump();
+        if (!isTalking)
+        {
+            Jump();
+        }
         if (!onAttack)
         {
             Movement();
@@ -54,8 +58,6 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = vel;
         }
-        
-
     }
 
 
@@ -150,6 +152,7 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(new Vector2(0, 200)); 
             comboTime = 0;
             skin.GetComponent<Animator>().Play("PlayerJumpAttack", -1);
+            FinishAttack();
         }
         else
         {
@@ -177,7 +180,7 @@ public class PlayerController : MonoBehaviour
 
     public void FinishAttack()
     {
-        vel = new Vector2(Input.GetAxisRaw("Horizontal") * 4, rb.velocity.y);
+        vel = new Vector2(Input.GetAxisRaw("Horizontal") * speed, rb.velocity.y);
         onAttack = false;
     }  //PERSONAGEM VOLTA A SE MOVER QUANDO TERMINA ATAQUE
     #endregion
