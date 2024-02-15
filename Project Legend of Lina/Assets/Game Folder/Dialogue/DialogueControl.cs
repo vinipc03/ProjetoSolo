@@ -12,7 +12,6 @@ public class DialogueControl : MonoBehaviour
         eng,
         spa
     }
-
     public idiom language;
 
     [Header("Components")]
@@ -21,19 +20,16 @@ public class DialogueControl : MonoBehaviour
     public Text speechText; // TEXTO DA FALA
     public Text actorNameText; // NOME DO NPC
 
-
     [Header("Settings")]
     public float typingSpeed; //VELOCIDADE DA FALA
 
     //VARIÁVEIS DE CONTROLE
     [SerializeField] private bool isShowing; //SE A JANAELA ESTÁ VISÍVEL
-    [SerializeField] private int index; // INDEX DAS SENTENÇAS
+    private int index; // INDEX DAS SENTENÇAS
     private string[] sentences; // FALAS
     private string[] currentActorName;
     private Sprite[] actorSprite;
-
     private PlayerController player;
-
     public static DialogueControl instance;
 
     private void Awake()
@@ -46,23 +42,14 @@ public class DialogueControl : MonoBehaviour
         player = FindObjectOfType<PlayerController>();
     }
 
-
-    void Update()
-    {
-        
-    }
-
     IEnumerator TypeSentence()
     {
         foreach (char letter in sentences[index].ToCharArray())
         {
-            Debug.Log("chamou o typesentence");
             speechText.text += letter;
             yield return new WaitForSeconds(typingSpeed);
-
         }
     }
-
     //PULA PARA PRÓXIMA FALA
     public void NextSentence()
     {
@@ -70,9 +57,7 @@ public class DialogueControl : MonoBehaviour
         {
             if (index < sentences.Length - 1)
             {
-                
                 index++;
-                Debug.Log("carregou o index");
                 profileSprite.sprite = actorSprite[index];
                 actorNameText.text = currentActorName[index];
                 speechText.text = "";
@@ -92,25 +77,20 @@ public class DialogueControl : MonoBehaviour
             }
         }
     }
-
     //CHAMA A FALA
     public void Speech(string[] txt, string[] actorName, Sprite[] actorProfile)
     {
         
         if (!isShowing)
         {
-            isShowing = true;
             dialogueObj.SetActive(true);
-            if(dialogueObj == true)
-            {
-                Debug.Log("dialogueObj está ativo");
-            }
             sentences = txt;
             currentActorName = actorName;
             actorSprite = actorProfile;
             profileSprite.sprite = actorSprite[index];
             actorNameText.text = currentActorName[index];
             StartCoroutine(TypeSentence());
+            isShowing = true;
             player.onAttack = true;
             player.isTalking = true;
         }

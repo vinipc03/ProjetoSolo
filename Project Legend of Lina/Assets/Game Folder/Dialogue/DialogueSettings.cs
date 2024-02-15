@@ -54,7 +54,6 @@ public class BuilderEditor : Editor
             if(ds.sentence != "")
             {
                 ds.dialogues.Add(s);
-
                 ds.speakerSprite = null;
                 ds.sentence = "";
             }

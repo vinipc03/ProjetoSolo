@@ -18,14 +18,15 @@ public class NPCDialogue : MonoBehaviour
     {
         GetNPCInfo();
     }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.E) && playerHit)
         {
-            Debug.Log("chamou o NPCdialogue");
             DialogueControl.instance.Speech(sentences.ToArray(), actorName.ToArray(), actorSprite.ToArray());
         }
     }
+
     void FixedUpdate()
     {
         ShowDialogue();
@@ -63,18 +64,11 @@ public class NPCDialogue : MonoBehaviour
         {
             playerHit = true;
             emote.GetComponent<Animator>().Play("Emote1", 0);
-            if(DialogueControl.instance.dialogueObj == false)
-            {
-                Debug.Log("dialogueObj está desativado");
-            }
-            //COLOCAR ANIMAÇÃO DE EMOTE
         }
         else
         {
             playerHit = false;
-            DialogueControl.instance.dialogueObj.SetActive(false);
             emote.GetComponent<Animator>().Play("Emote2", 0);
-            // COLOCAR ANIMAÇÃO DE EMOTE
         }
     }
 

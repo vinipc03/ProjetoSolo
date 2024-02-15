@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a37f5f0db2ab7e4a9268d94629a0f63, type: 3}
-  m_Name: HatMan Dialogue
+  m_Name: Hatman_Dialogue
   m_EditorClassIdentifier: 
-  actor: {fileID: 2878889413514500163, guid: 05c2ad52ba556ec47b624518444bb952, type: 3}
+  actor: {fileID: 4953087469097944455, guid: 1ca743742e895154989212b5f4e3f189, type: 3}
   speakerSprite: {fileID: 0}
   sentence: 
   dialogues:
-  - actorName: Hat Man
+  - actorName: 'Hat Man:'
     profileImage: {fileID: 21300000, guid: 76552652785a60a4e8bd14aa29d7356b, type: 3}
     sentence:
-      portuguese: OHH YEAAH
-      english: OHH YEAAH
+      portuguese: OHHH YEAH
+      english: 
       spanish: 
