@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a37f5f0db2ab7e4a9268d94629a0f63, type: 3}
+  m_Name: Woman_Dialogue
+  m_EditorClassIdentifier: 
+  actor: {fileID: 730913459297713686, guid: 16d12873aeb19bd46b84f6b12c324881, type: 3}
+  speakerSprite: {fileID: 0}
+  sentence: 
+  dialogues:
+  - actorName: 'Woman:'
+    profileImage: {fileID: 21300000, guid: 3b0f4357a7d037b45a0dffd41b21eab3, type: 3}
+    sentence:
+      portuguese: Hello dear...
+      english: 
+      spanish: 

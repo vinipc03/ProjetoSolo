@@ -16,8 +16,9 @@ public class PlayerController : MonoBehaviour
     public float jumpForce;
     public float jumpTime;
     private float jumpTimeCounter;
-    private bool isJumping;
+    public bool isJumping;
     public Transform floorCollider;
+    public Transform plataformCollider;
     public LayerMask floorLayer;
     private float dashTime;
     public bool isTalking;
@@ -50,6 +51,8 @@ public class PlayerController : MonoBehaviour
         Dash();
         LifeBarControl();
         Death();
+
+        skin.GetComponent<Animator>().SetFloat("yVelocity", rb.velocity.y);
     }
 
     private void FixedUpdate()
@@ -82,12 +85,16 @@ public class PlayerController : MonoBehaviour
     void Jump() //PULO 
     {
         bool canJump = Physics2D.OverlapCircle(floorCollider.position, 0.3f, floorLayer);
-        if (canJump && Input.GetButtonDown("Jump")) // && comboTime > 0.5f
+        //bool canJump2 = Physics2D.OverlapCircle(plataformCollider.position, 0.3f, floorLayer);
+        if (canJump && Input.GetButtonDown("Jump")) // && comboTime > 0.5f canJump2 && Input.GetButtonDown("Jump")
         {
             isJumping = true;
             jumpTimeCounter = jumpTime;
             onAttack = false;
             skin.GetComponent<Animator>().Play("PlayerJump", -1);
+            //skin.GetComponent<Animator>().Play("PlayerJump1", -1);
+            skin.GetComponent<Animator>().SetBool("Jump", true);
+
             rb.velocity = Vector2.up * jumpForce;
         }
 
@@ -95,19 +102,19 @@ public class PlayerController : MonoBehaviour
         {
             if(jumpTimeCounter > 0 && isJumping == true)
             {
-                rb.velocity = Vector2.up * jumpForce;
                 jumpTimeCounter -= Time.deltaTime;
             }
             else
             {
-                isJumping = false;
-
+                isJumping = false; 
             }
         }
 
-        if (Input.GetButtonUp("Jump"))
+        if (Input.GetButtonUp("Jump") && rb.velocity.y < 0)
         {
             isJumping = false;
+            //skin.GetComponent<Animator>().Play("PlayerFall", -1);
+            skin.GetComponent<Animator>().SetBool("Jump", false);
         }
     }
     
@@ -140,7 +147,7 @@ public class PlayerController : MonoBehaviour
         // ATAQUE NO AR
         bool canJump = Physics2D.OverlapCircle(floorCollider.position, 0.3f, floorLayer);
         comboTime = comboTime + Time.deltaTime;
-        if(canJump == false && Input.GetButtonDown("Fire1") && comboTime > 0.5f)
+        if(canJump == false && Input.GetButtonDown("Fire1"))
         {
             comboNum++;
             if (comboNum > 1)
@@ -148,9 +155,8 @@ public class PlayerController : MonoBehaviour
                 comboNum = 1;
             }
             comboTime = 0;
-            rb.velocity = Vector2.zero;
-            rb.AddForce(new Vector2(0, 200)); 
-            comboTime = 0;
+            //rb.velocity = Vector2.zero;
+            //rb.AddForce(new Vector2(0, 200)); 
             skin.GetComponent<Animator>().Play("PlayerJumpAttack", -1);
             FinishAttack();
         }
@@ -171,7 +177,6 @@ public class PlayerController : MonoBehaviour
             }
         }
        
-
         if (comboTime >= 1f)
         {
             comboNum = 0;
@@ -203,4 +208,8 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(floorCollider.position, 0.3f);
+    }
 }
