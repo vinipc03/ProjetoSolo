@@ -37,6 +37,7 @@ public class Character : MonoBehaviour
         life = life - value;
         skin.GetComponent<Animator>().Play("TakeHit", 1);
         cam.GetComponent<Animator>().Play("CameraTakeHit", -1);
+
     }
 
     public void LifeControl()

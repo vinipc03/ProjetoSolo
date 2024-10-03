@@ -1,0 +1,10 @@
+Mecânicas jogador:
+-Ataque padrão combo x3
+-Ataques especiais:
+Estocada, lightning bolt, lightning slam
+-Habilidades especiais:
+Pulo Duplo, lightning dash
+
+Mecânicas de itens:
+Poção de mana
+Poção de vida

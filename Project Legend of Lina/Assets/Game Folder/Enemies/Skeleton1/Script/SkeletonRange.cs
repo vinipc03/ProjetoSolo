@@ -26,4 +26,9 @@ public class SkeletonRange : MonoBehaviour
 
         }
     }
+
+    private void Attack()
+    {
+        transform.parent.GetComponent<Animator>().Play("SkeletonAttack", -1);
+    }
 }

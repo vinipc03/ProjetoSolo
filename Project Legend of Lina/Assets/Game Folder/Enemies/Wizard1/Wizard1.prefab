@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8f35471947ead24892dd72e2ec305d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visionRadius: 30
+  visionRadius: 20
   fireball: {fileID: 1485432191254585159, guid: 6c6c238c3fbb222408137ca49e00cf85, type: 3}
   firePoint: {fileID: 5142739948285484255}
   skin: {fileID: 5142739948937769729}

@@ -6,10 +6,12 @@ public class SkeletonController : MonoBehaviour
 {
     public Transform a;
     public Transform b;
-    Rigidbody2D rb;
+    public float patrolSpeed;
+    public float chaseSpeed;
 
     public Transform skin;
     public Transform skeletonRange;
+    public GameObject skeleton;
 
     public bool goRight;
 
@@ -28,7 +30,6 @@ public class SkeletonController : MonoBehaviour
     void Start()
     {
         activeMovement = true;
-        rb = GetComponent<Rigidbody2D>();
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     }
 
@@ -41,7 +42,7 @@ public class SkeletonController : MonoBehaviour
         }
 
         posX = target.transform.position.x - transform.position.x;
-        switch (atualState)
+        /*switch (atualState)
         {
             case State.Patrol:
                 Patrol();
@@ -50,6 +51,11 @@ public class SkeletonController : MonoBehaviour
                 Chase();
                 UpdateRotation();
                 break;
+        }
+        */
+        if(GetComponent<Character>().life >= 0)
+        {
+            Patrol();
         }
         Death();
     }
@@ -65,7 +71,7 @@ public class SkeletonController : MonoBehaviour
             {
                 goRight = false;
             }
-            transform.position = Vector2.MoveTowards(transform.position, b.position, 1f * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, b.position, patrolSpeed * Time.deltaTime);
         }
         else
         {
@@ -74,7 +80,7 @@ public class SkeletonController : MonoBehaviour
             {
                 goRight = true;
             }
-            transform.position = Vector2.MoveTowards(transform.position, a.position, 1f * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, a.position, patrolSpeed * Time.deltaTime);
         }
 
         // Verifica se o jogador está dentro do raio de visão
@@ -87,8 +93,8 @@ public class SkeletonController : MonoBehaviour
     void Chase()
     {
         // Lógica de perseguição ao jogador
-        transform.position = Vector3.MoveTowards(transform.position, target.position, 2 * Time.deltaTime);
-
+        transform.position = Vector3.MoveTowards(transform.position, target.position, chaseSpeed * Time.deltaTime);
+        skin.GetComponent<Animator>().Play("SkeletonRun", -1);
         // Verifica se o jogador saiu do raio de visão
         if (Vector3.Distance(transform.position, target.position) > visionRadius)
         {
@@ -136,10 +142,19 @@ public class SkeletonController : MonoBehaviour
         if (GetComponent<Character>().life <= 0)
         {
             skeletonRange.GetComponent<CircleCollider2D>().enabled = false;
-            GetComponent<CapsuleCollider2D>().enabled = false;
-            rb.gravityScale = 0;
+            skeleton.GetComponent<CircleCollider2D>().enabled = false;
             this.enabled = false;
+            //Invoke("Revive", 5f);
         }
+    }
+
+    public void Revive()
+    {
+        skeletonRange.GetComponent<CircleCollider2D>().enabled = false;
+        GetComponent<CapsuleCollider2D>().enabled = true;
+        this.enabled = true;
+        skin.GetComponent<Animator>().Play("SkeletonRevive", -1); //SetBool("isReviving", true);
+        skeleton.GetComponent<Character>().life = skeleton.GetComponent<Character>().maxLife;
     }
 
     void UpdateRotation()

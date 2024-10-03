@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
         LifeBarControl();
         Death();
 
-        skin.GetComponent<Animator>().SetFloat("yVelocity", rb.velocity.y);
+        //skin.GetComponent<Animator>().SetFloat("yVelocity", rb.velocity.y);
     }
 
     private void FixedUpdate()
@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour
 
     void Jump() //PULO 
     {
-        bool canJump = Physics2D.OverlapCircle(floorCollider.position, 0.3f, floorLayer);
+        bool canJump = Physics2D.OverlapCircle(floorCollider.position, 0.2f, floorLayer);
         //bool canJump2 = Physics2D.OverlapCircle(plataformCollider.position, 0.3f, floorLayer);
         if (canJump && Input.GetButtonDown("Jump")) // && comboTime > 0.5f canJump2 && Input.GetButtonDown("Jump")
         {
@@ -128,9 +128,9 @@ public class PlayerController : MonoBehaviour
             onAttack = false;
             skin.GetComponent<Animator>().Play("PlayerDash", -1);
             rb.velocity = Vector2.zero;
-            rb.AddForce(new Vector2(skin.localScale.x * 300, 0));
+            rb.AddForce(new Vector2(skin.localScale.x * 250, 0));
             rb.gravityScale = 0;
-            Invoke("RestoreGravityScale", 0.3f);
+            Invoke("RestoreGravityScale", 0.25f);
         }
     }
 
@@ -210,6 +210,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawWireSphere(floorCollider.position, 0.3f);
+        Gizmos.DrawWireSphere(floorCollider.position, 0.2f);
     }
 }

@@ -12,6 +12,7 @@ public class FlyingEyeController : MonoBehaviour
     public Transform flyingEyeRange;
 
     public bool goRight;
+    public float speed;
 
     public bool activeMovement;
 
@@ -71,7 +72,7 @@ public class FlyingEyeController : MonoBehaviour
             {
                 goRight = false;
             }
-            transform.position = Vector2.MoveTowards(transform.position, b.position, 1f * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, b.position, speed * Time.deltaTime);
         }
         else
         {
@@ -80,7 +81,7 @@ public class FlyingEyeController : MonoBehaviour
             {
                 goRight = true;
             }
-            transform.position = Vector2.MoveTowards(transform.position, a.position, 1f * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, a.position, speed * Time.deltaTime);
         }
 
         // Verifica se o jogador está dentro do raio de visão

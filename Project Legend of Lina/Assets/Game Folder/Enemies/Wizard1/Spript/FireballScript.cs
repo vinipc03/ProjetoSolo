@@ -36,10 +36,9 @@ public class FireballScript : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             collision.GetComponent<Character>().PlayerDamage(1);
+            Instantiate(fireImpact, transform.position, transform.rotation);
         }
-
-        Instantiate(fireImpact, transform.position, transform.rotation);
-        Destroy(fireImpact);
+        //Destroy(fireImpact);
         Destroy(gameObject);
     }
 }
